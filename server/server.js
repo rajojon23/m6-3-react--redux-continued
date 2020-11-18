@@ -19,7 +19,7 @@ app.get('/spotify_access_token', (req, res, next) => {
   );
 
   // TODO: use authString in a request to Spotify!
-  res.send({ todo: true });
+  res.send({access_token :  process.env.SPOTIFY_OATH});//I took the tokenId generated in https://developer.spotify.com/console/get-artist/?id=0OdUWJ0sBjDrqHygGUXeCF
 });
 
 app.listen(port, function(error) {
