@@ -4,11 +4,12 @@ const bodyParser = require('body-parser');
 
 const app = new express();
 const port = 5678;
+const fetch = require("isomorphic-fetch");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/spotify_access_token', (req, res, next) => {
+app.get('/spotify_access_token', async (req, res, next) => {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_SECRET;
 
@@ -18,8 +19,21 @@ app.get('/spotify_access_token', (req, res, next) => {
     'base64'
   );
 
+  const response = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${authString}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "grant_type=client_credentials",
+  });
+
+  const json = await response.json();
+  console.log("token_credentials", json);
+
+  return res.send(json);
   // TODO: use authString in a request to Spotify!
-  res.send({access_token :  process.env.SPOTIFY_OATH});//I took the tokenId generated in https://developer.spotify.com/console/get-artist/?id=0OdUWJ0sBjDrqHygGUXeCF
+  // res.send({access_token :  process.env.SPOTIFY_OATH});
 });
 
 app.listen(port, function(error) {

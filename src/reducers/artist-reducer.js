@@ -6,7 +6,6 @@ const initialState = {
   export default function artistReducer(state = initialState, action) {
 
 
-    console.log("inside reducer action", action);
     
     switch (action.type) {
 
